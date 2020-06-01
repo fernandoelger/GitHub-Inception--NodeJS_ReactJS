@@ -65,7 +65,16 @@ app.put("/repositories/:id", (request, response) => {
     return response.status(400).json({error: 'Repository not found.'});
   }
 
-  const repository = {id, title, url, techs}
+  const likes = repositories[repositoryIndex].likes;
+
+  const repository = {
+    id, 
+    title,
+    url, 
+    techs, 
+    likes
+  };
+
   repositories[repositoryIndex] = repository;
 
   return response.status(200).json(repository);
@@ -85,7 +94,7 @@ app.delete("/repositories/:id", (request, response) => {
   return response.status(204).send();
 });
 
-// POST method because now we have two entities: repository and likes
+// POST method because now we have two modules: repository and likes
 // So we can create differents business rules for each one
 app.post("/repositories/:id/like", (request, response) => {
   const {id} = request.params;
@@ -98,7 +107,7 @@ app.post("/repositories/:id/like", (request, response) => {
 
   repositories[repositoryIndex].likes++;
 
-  return response.status(204).send();
+  return response.status(200).json({likes: repositories[repositoryIndex].likes});
 });
 
 module.exports = app;
